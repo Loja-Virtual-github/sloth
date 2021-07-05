@@ -213,6 +213,8 @@ class Providers
             $this->config->path_cache,
         ];
 
+        $directoryTree = array_filter($directoryTree);
+
         $cachePath = implode('/', $directoryTree);
         $cache = new SplFileInfo($cachePath);
 
