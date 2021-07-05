@@ -1,0 +1,24 @@
+{
+    "name": "pablosanches/sloth",
+    "description": "Simple system to control cache",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Pablo Sanches",
+            "email": "sanches.webmaster@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "PabloSanches\\Sloth\\": "src/"
+        }
+    },
+    "require": {
+        "psr/simple-cache": "*",
+        "matthiasmullie/minify": "^1.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "5.7.*"
+    }
+}
