@@ -210,10 +210,12 @@ class Providers
     {
         $directoryTree = [
             $this->config->path,
-            $this->config->path_cache,
         ];
 
-        $directoryTree = array_filter($directoryTree);
+        if (!empty($this->config->path_cache)) {
+            $directoryTree[] = $this->config->path_cache;
+        }
+
 
         $cachePath = implode('/', $directoryTree);
         $cache = new SplFileInfo($cachePath);
@@ -222,7 +224,9 @@ class Providers
             return $cachePath . '/' . $endpoint;
         }
         
-        mkdir($cachePath, 0755);
+        if (!empty($this->config->path_cache)) {
+            mkdir($cachePath, 0755);
+        }
 
         return $cachePath . '/' . $endpoint;
     }
