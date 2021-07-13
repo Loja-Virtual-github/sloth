@@ -12,6 +12,7 @@ use SplFileInfo;
 
 class HTML extends Providers
 {
+    const CACHE_PREFIX = '<!-- FROM CACHE -->';
     protected $extension = 'html';
 
     protected $config;
@@ -28,7 +29,8 @@ class HTML extends Providers
 
     protected function processContent($content)
     {
-        // TODO
+        $content = self::CACHE_PREFIX . "\r\n" . $content;
+        
         return trim($content);
     }
 }
