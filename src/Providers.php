@@ -15,7 +15,9 @@ class Providers
         'path'          => '',
         'path_cache'    => 'cache',
         'minify'        => false,
-        'concat'        => false
+        'concat'        => false,
+        'prependPrefix' => false,
+        'appendPrefix' => false,
     );
 
     public function __construct(array $config)
