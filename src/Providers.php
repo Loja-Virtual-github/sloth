@@ -49,7 +49,7 @@ class Providers
         return $default;
     }
 
-    public function set($filename, $content, $ttl = null)
+    public function set($filename, $content, $getContent = false)
     {
         if (empty($filename)) {
             throw new InvalidArgumentExceptions('Invalid filename');
@@ -58,13 +58,23 @@ class Providers
         if (empty($content)) {
             throw new InvalidArgumentExceptions("Invalid content from {$filename}");
         }
+
+        if ($getContent) {
+            $contentStr = '';
+            if (is_array($content)) {
+                foreach ($content as $contentFile) {
+                    $contentStr .= $this->getContent($contentFile);
+                }
+            } else {
+                $contentStr .= $this->getContent($content);
+            }
+            $content = $contentStr;
+        }
         
         $filepath = $this->getBuildCacheName($filename);
-        $file = new SplFileObject($filepath, 'w');
         $content = $this->processContent($content);
-        $bites = $file->fwrite($content);
 
-        return ($bites > 0);
+        return (file_put_contents($filepath, $content) > 0);
     }
 
     public function delete($filename)
@@ -167,7 +177,7 @@ class Providers
             $content = array_values($values);
             $content = implode("\r\n", $content);
 
-            return $this->set($filename, $content);
+            return $this->set($filename, $content, $getContent);
         }
 
         foreach ($values as $key => $value) {
@@ -214,14 +224,11 @@ class Providers
 
     protected function getContent($filepath)
     {
-        $content = '';
+        $content = file_get_contents($filepath);
 
-        $file = new SplFileObject($filepath, 'r');
-        $size = $file->getSize();
-        if ($size > 0) {
-            $content = $file->fread($size);
+        if (!empty($content)) {
             $content = $this->processContent($content);
-        }
+        }        
 
         return $content;
     }
