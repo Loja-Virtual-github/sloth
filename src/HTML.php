@@ -12,10 +12,11 @@ use SplFileInfo;
 
 class HTML extends Providers
 {
-    const CACHE_PREFIX = '<!-- FROM CACHE -->';
     protected $extension = 'html';
 
     protected $config;
+
+    protected $prefix = '<!-- FROM CACHE -->';
 
     public function __construct(array $config)
     {
@@ -29,7 +30,11 @@ class HTML extends Providers
 
     protected function processContent($content)
     {
-        $content = self::CACHE_PREFIX . "\r\n" . $content;
+        if ($this->config->prependPrefix) {
+            $content = $this->prefix . "\r\n" . $content;
+        } else if ($this->config->appendPrefix) {
+            $content = $content . "\r\n" . $this->prefix;
+        }
         
         return trim($content);
     }
