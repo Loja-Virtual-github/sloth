@@ -233,4 +233,17 @@ class CacheCSSTest extends TestCase
         $test = 'body{background:green}body div{width:100px;display:block}body{background:green}body div{width:100px;display:block}body{background:green}body div{width:100px;display:block}';
         $this->assertEquals($test, $content);
     }
+
+    public function testSetMultipleFromList()
+    {
+        $cache = new Cache(CSS::create($this->config));
+        $filepath = $this->path . '/example.css';
+        $result = $cache->setMultiple(array(
+            'style.css' => $filepath,
+            'style2.css' => $filepath,
+            'style3.css' => $filepath
+        ), true);
+
+        $this->assertTrue($result);
+    }
 }

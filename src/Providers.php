@@ -149,19 +149,24 @@ class Providers
         return $defaults;
     }
 
-    public function setMultiple($values, $ttl = null)
+    public function setMultiple($values, $getContent = false)
     {
         if (empty($values)) {
             throw new InvalidArgumentExceptions('Values cannot be empty');
         }
+        
+        if ($getContent) {
+            $contentList = array_values($values);
+            $content = $this->getContentFromList($contentList);
+        }
 
         if ($this->config->concat) {
-
             $keys = array_keys($values);
             $filename = $this->buildFileName($keys);
             
             $content = array_values($values);
             $content = implode("\r\n", $content);
+
             return $this->set($filename, $content);
         }
 
@@ -187,6 +192,19 @@ class Providers
         }
 
         return true;
+    }
+
+    protected function getContentFromList(array $contentList)
+    {
+        $content = '';
+
+        if (!empty($contentList)) {
+            foreach ($contentList as $contentFile) {
+                $content .= $this->getContent($contentFile);
+            }
+        }
+
+        return $content;
     }
 
     protected function getExtension()
