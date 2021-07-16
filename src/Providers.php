@@ -3,9 +3,7 @@
 namespace PabloSanches\Sloth;
 
 use DirectoryIterator;
-use Exception;
 use PabloSanches\Sloth\InvalidArgumentExceptions;
-use phpDocumentor\Reflection\DocBlock\Tags\Example;
 use SplFileObject;
 use SplFileInfo;
 
@@ -42,7 +40,7 @@ class Providers
             if ($size > 0) {
                 $content = $file->fread($size);
 
-                return $content; // TODO PROCESS BY ADAPTER
+                return $content;
             }
         }
 
@@ -74,7 +72,11 @@ class Providers
         $filepath = $this->getBuildCacheName($filename);
         $content = $this->processContent($content);
 
-        return (file_put_contents($filepath, $content) > 0);
+        if (file_put_contents($filepath, $content) > 0) {
+            return $content;
+        }
+
+        return false;
     }
 
     public function delete($filename)
@@ -99,6 +101,10 @@ class Providers
             throw new InvalidArgumentExceptions('Filename cannot be empty');
         }
 
+        if (is_array($filename)) {
+            $keys = array_keys($filename);
+            $filename = $this->buildFileName($keys);
+        }
         $cacheName = $this->getBuildCacheName($filename);
         $fileInfo = new SplFileInfo($cacheName);
         
@@ -138,6 +144,12 @@ class Providers
             throw new InvalidArgumentExceptions('Keys cannot be empty');
         }
 
+        $filename = $this->buildFileName($keys);
+        if ($this->has($filename)) {
+            $filepath = $this->getBuildCacheName($filename);
+            return $this->getContent($filepath);
+        }
+
         $contents = array();
         foreach ($keys as $key) {
             $key = trim($key);
@@ -173,17 +185,18 @@ class Providers
         if ($this->config->concat) {
             $keys = array_keys($values);
             $filename = $this->buildFileName($keys);
-            
-            $content = array_values($values);
-            $content = implode("\r\n", $content);
 
-            return $this->set($filename, $content, $getContent);
+            return $this->set($filename, $content);
         }
 
-        foreach ($values as $key => $value) {
-            if (!$this->set($key, $value)) {
+        foreach ($values as $value) {
+            if (!$this->set($value, $content)) {
                 return false;
             }
+        }
+
+        if ($getContent) {
+            return $content;
         }
 
         return true;
@@ -195,13 +208,8 @@ class Providers
             throw new InvalidArgumentExceptions('Keys cannot be empty');
         }
 
-        foreach ($keys as $filename) {
-            if (!$this->delete($filename)) {
-                return false;
-            }
-        }
-
-        return true;
+        $filename = $this->buildFileName($keys);
+        return $this->delete($filename);
     }
 
     protected function getContentFromList(array $contentList)
@@ -217,6 +225,11 @@ class Providers
         return $content;
     }
 
+    public function process($file)
+    {
+        return $this->getContentFromList($file);
+    }
+
     protected function getExtension()
     {
         return $this->extension;
@@ -224,16 +237,12 @@ class Providers
 
     protected function getContent($filepath)
     {
-        $content = file_get_contents($filepath);
-
-        if (!empty($content)) {
-            $content = $this->processContent($content);
-        }        
+        $content = @file_get_contents($filepath);
 
         return $content;
     }
 
-    protected function getBuildCacheName($endpoint = '')
+    public function getBuildCacheName($endpoint = '')
     {
         $directoryTree = [
             $this->config->path,
@@ -247,15 +256,29 @@ class Providers
         $cachePath = implode('/', $directoryTree);
         $cache = new SplFileInfo($cachePath);
 
+        if (is_array($endpoint)) {
+            $endpoint = array_keys($endpoint);
+            $endpoint = implode('#', $endpoint);
+        }
+
         if ($cache->isDir()) {
-            return $cachePath . '/' . $endpoint;
+            $path = $cachePath . '/' . $endpoint;
+            $path = strtr($path, array(
+                '//' => '/'
+            ));
+
+            return $path;
         }
         
         if (!empty($this->config->path_cache)) {
-            mkdir($cachePath, 0755);
+            mkdir($cachePath, 0777);
         }
 
-        return $cachePath . '/' . $endpoint;
+        $path = $cachePath . '/' . $endpoint;
+        $path = strtr($path, array(
+            '//' => '/'
+        ));
+        return $path;
     }
 
     public function buildFileName($keys = null)

@@ -35,7 +35,6 @@ class CSS extends Providers
 
     private function minify(&$content)
     {
-        $path = $this->getBuildCacheName();
         $minifier = new Minify\CSS();
         $minifier->add($content);
 

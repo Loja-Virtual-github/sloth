@@ -162,4 +162,18 @@ class Cache implements CacheInterface
             ->provider
             ->has($key);
     }
+
+    public function process($file)
+    {
+        return $this
+            ->provider
+            ->process($file);
+    }
+
+    public function getBuildCacheName($keys = null)
+    {
+        return $this
+            ->provider
+            ->getBuildCacheName($keys);
+    }
 }
