@@ -35,7 +35,7 @@ class HTML extends Providers
         } else if ($this->config->appendPrefix) {
             $content = $content . "\r\n" . $this->prefix;
         }
-        
+
         return trim($content);
     }
 }

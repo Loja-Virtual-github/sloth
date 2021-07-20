@@ -11,6 +11,8 @@ class CSS extends Providers
 
     protected $config;
 
+    protected $prefix = "/*FROM CACHE*/";
+
     public function __construct(array $config)
     {
         parent::__construct($config);
@@ -21,13 +23,19 @@ class CSS extends Providers
         return new CSS($config);
     }
 
-    protected function processContent($content)
+    public function processContent($content)
     {
         $content = trim($content);
 
         // Minify all files
         if ($this->config->minify) {
             $this->minify($content);
+        }
+
+        if ($this->config->prependPrefix) {
+            $content = $this->prefix . "\r\n" . $content;
+        } else if ($this->config->appendPrefix) {
+            $content = $content . "\r\n" . $this->prefix;
         }
 
         return trim($content);

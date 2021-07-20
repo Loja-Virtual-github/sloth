@@ -10,18 +10,19 @@ use SplFileInfo;
 class Providers
 {
     private $defaultConfigs = array(
-        'path'          => '',
-        'path_cache'    => 'cache',
-        'minify'        => false,
-        'concat'        => false,
-        'prependPrefix' => false,
-        'appendPrefix' => false,
+        'path'                  => '',
+        'path_cache'            => 'cache',
+        'minify'                => false,
+        'concat'                => false,
+        'concat_extension'      => true,
+        'prependPrefix'         => false,
+        'appendPrefix'          => false,
     );
 
     public function __construct(array $config)
     {
         $this->config = (object) array_merge(
-            $this->defaultConfigs, 
+            $this->defaultConfigs,
             $config
         );
     }
@@ -35,7 +36,7 @@ class Providers
         $filepath = $this->getBuildCacheName($key);
         $fileInfo = new SplFileInfo($filepath);
         if ($fileInfo->isFile()) {
-            $file = new SplFileObject($filepath, 'r');        
+            $file = new SplFileObject($filepath, 'r');
             $size = $file->getSize();
             if ($size > 0) {
                 $content = $file->fread($size);
@@ -68,7 +69,7 @@ class Providers
             }
             $content = $contentStr;
         }
-        
+
         $filepath = $this->getBuildCacheName($filename);
         $content = $this->processContent($content);
 
@@ -107,9 +108,9 @@ class Providers
         }
         $cacheName = $this->getBuildCacheName($filename);
         $fileInfo = new SplFileInfo($cacheName);
-        
+
         return (
-            $fileInfo->isFile() && 
+            $fileInfo->isFile() &&
             $fileInfo->getSize() > 0
         );
     }
@@ -130,7 +131,7 @@ class Providers
             if ($fileInfo->isFile()) {
                 $pathname = $fileInfo->getPathname();
                 if(!unlink($pathname)) {
-                    return false;       
+                    return false;
                 }
             }
         }
@@ -163,7 +164,7 @@ class Providers
                 $contents[$key] = $content;
             }
         }
-        
+
         if (!empty($contents)) {
             return $contents;
         }
@@ -176,7 +177,7 @@ class Providers
         if (empty($values)) {
             throw new InvalidArgumentExceptions('Values cannot be empty');
         }
-        
+
         if ($getContent) {
             $contentList = array_values($values);
             $content = $this->getContentFromList($contentList);
@@ -227,7 +228,8 @@ class Providers
 
     public function process($file)
     {
-        return $this->getContentFromList($file);
+        $content = $this->getContentFromList($file);
+        return $this->processContent($content);
     }
 
     protected function getExtension()
@@ -269,7 +271,7 @@ class Providers
 
             return $path;
         }
-        
+
         if (!empty($this->config->path_cache)) {
             mkdir($cachePath, 0777);
         }
@@ -284,7 +286,13 @@ class Providers
     public function buildFileName($keys = null)
     {
         if (!empty($this->config->concat_filename)) {
-            return "{$this->config->concat_filename}.{$this->extension}";
+            $ext = '';
+
+            if ($this->config->concat_extension) {
+                $ext = ".{$this->extension}";
+            }
+
+            return "{$this->config->concat_filename}{$ext}";
         }
 
         if (empty($keys)) {
