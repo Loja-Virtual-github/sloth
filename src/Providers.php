@@ -111,12 +111,8 @@ class Providers
             $filename = $this->buildFileName($keys);
         }
         $cacheName = $this->getBuildCacheName($filename);
-        $fileInfo = new SplFileInfo($cacheName);
 
-        return (
-            $fileInfo->isFile() &&
-            $fileInfo->getSize() > 0
-        );
+        return file_exists($cacheName);
     }
 
     public function clear()
