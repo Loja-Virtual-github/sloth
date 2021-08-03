@@ -34,15 +34,8 @@ class Providers
         }
 
         $filepath = $this->getBuildCacheName($key);
-        $fileInfo = new SplFileInfo($filepath);
-        if ($fileInfo->isFile()) {
-            $file = new SplFileObject($filepath, 'r');
-            $size = $file->getSize();
-            if ($size > 0) {
-                $content = $file->fread($size);
-
-                return $content;
-            }
+        if (file_exists($filepath)) {
+            return $this->getContent($filepath);
         }
 
         return $default;
@@ -72,10 +65,6 @@ class Providers
 
         $filepath = $this->getBuildCacheName($filename);
         $content = $this->processContent($content);
-        
-        if (!is_dir($filepath)) {
-            @mkdir($filepath, 0755, true);
-        }
 
         if (file_put_contents($filepath, $content) > 0) {
             return $content;
