@@ -72,12 +72,16 @@ class Providers
 
         $filepath = $this->getBuildCacheName($filename);
         $content = $this->processContent($content);
+        
+        if (!is_dir($filepath)) {
+            @mkdir($filepath, 0755, true);
+        }
 
         if (file_put_contents($filepath, $content) > 0) {
             return $content;
         }
 
-        return false;
+        return $content;
     }
 
     public function delete($filename)
@@ -178,15 +182,13 @@ class Providers
             throw new InvalidArgumentExceptions('Values cannot be empty');
         }
 
+        $contentList = array_values($values);
         if ($getContent) {
-            $contentList = array_values($values);
             $content = $this->getContentFromList($contentList);
         }
 
         if ($this->config->concat) {
-            $keys = array_keys($values);
-            $filename = $this->buildFileName($keys);
-
+            $filename = $this->buildFileName($contentList);
             return $this->set($filename, $content);
         }
 
