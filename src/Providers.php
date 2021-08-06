@@ -193,7 +193,7 @@ class Providers
     public function deleteMultiple($keys)
     {
         if (empty($keys)) {
-            throw new InvalidArgumentExceptions('Keys cannot be empty');
+            return false;
         }
 
         $filename = $this->buildFileName($keys);
@@ -226,8 +226,7 @@ class Providers
 
     protected function getContent($filepath)
     {
-        $content = "/* INICIO - ". $filepath ."*/" . @file_get_contents($filepath) . "/* FIM - ". $filepath ."*/";
-
+        $content = @file_get_contents($filepath);
         return $content;
     }
 
