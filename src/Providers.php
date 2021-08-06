@@ -226,7 +226,7 @@ class Providers
 
     protected function getContent($filepath)
     {
-        $content = @file_get_contents($filepath);
+        $content = "/* INICIO - ". $filepath ."*/" . @file_get_contents($filepath) . "/* FIM - ". $filepath ."*/";
 
         return $content;
     }
