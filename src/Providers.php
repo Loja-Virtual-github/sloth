@@ -252,9 +252,9 @@ class Providers
 
         if ($cache->isDir()) {
             $path = $cachePath . '/' . $endpoint;
-            $path = strtr($path, array(
-                '//' => '/'
-            ));
+            // $path = strtr($path, array(
+            //     '//' => '/'
+            // ));
 
             return $path;
         }
@@ -264,9 +264,9 @@ class Providers
         }
 
         $path = $cachePath . '/' . $endpoint;
-        $path = strtr($path, array(
-            '//' => '/'
-        ));
+        // $path = strtr($path, array(
+        //     '//' => '/'
+        // ));
         return $path;
     }
 
