@@ -45,9 +45,9 @@ class Providers
 
     public function set($filename, $content, $getContent = false)
     {
-        if (!$this->hasError()) {
-            return false;
-        }
+        // if (!$this->hasError()) {
+        //     return false;
+        // }
 
         if (empty($filename)) {
             throw new InvalidArgumentExceptions('Invalid filename');
@@ -72,8 +72,10 @@ class Providers
         $filepath = $this->getBuildCacheName($filename);
         $content = $this->processContent($content);
 
-        if (file_put_contents($filepath, $content) > 0) {
-            return $content;
+        if (!$this->hasError()) {
+            if (file_put_contents($filepath, $content) > 0) {
+                return $content;
+            }
         }
 
         return $content;
@@ -169,10 +171,6 @@ class Providers
 
     public function setMultiple($values, $getContent = false)
     {
-        if (!$this->hasError()) {
-            return false;
-        }
-
         if (empty($values)) {
             throw new InvalidArgumentExceptions('Values cannot be empty');
         }
