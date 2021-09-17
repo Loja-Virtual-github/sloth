@@ -33,7 +33,9 @@ class Cache implements CacheInterface
         $this->provider = $provider;
         $this->state = $state;
 
-        $this->provider->setState($this->state);
+        if (method_exists($this->provider, 'setState')) {
+            $this->provider->setState($this->state);
+        }
     }
 
     public function __call($method, $arguments)

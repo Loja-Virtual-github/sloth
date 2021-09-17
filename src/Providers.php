@@ -316,8 +316,7 @@ class Providers
 
     public function logIt($level, $msg)
     {
-        $fileName = 'log_cache.txt';
-        $path = $this->getBuildCacheName($fileName);
+        $path = $this->config->log_path . '/log_cache.txt';
 
         $date = new \DateTime('Now');
         $date = $date->format('d/m/Y H:i:s');
