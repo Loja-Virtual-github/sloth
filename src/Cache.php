@@ -188,4 +188,11 @@ class Cache implements CacheInterface
             ->provider
             ->getBuildCacheName($keys);
     }
+
+    public function setCacheAvailable($available)
+    {
+        $this
+            ->provider
+            ->setCacheAvailable($available);
+    }
 }

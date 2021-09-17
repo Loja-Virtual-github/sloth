@@ -13,6 +13,8 @@ class Providers
 
     private $state = null;
 
+    private $cache_available = true;
+
     private $defaultConfigs = array(
         'path'                  => '',
         'path_cache'            => 'cache',
@@ -74,7 +76,7 @@ class Providers
         $filepath = $this->getBuildCacheName($filename);
         $content = $this->processContent($content);
 
-        if (!$this->hasError()) {
+        if (!$this->hasError() && $this->cache_available) {
             if (file_put_contents($filepath, $content) > 0) {
                 return $content;
             }
@@ -327,5 +329,10 @@ class Providers
     public function setState($state)
     {
         $this->state = $state;
+    }
+
+    public function setCacheAvailable($available)
+    {
+        $this->cache_available = $available;
     }
 }
