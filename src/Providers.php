@@ -9,6 +9,8 @@ use SplFileInfo;
 
 class Providers
 {
+    private $hasError = false;
+
     private $defaultConfigs = array(
         'path'                  => '',
         'path_cache'            => 'cache',
@@ -43,6 +45,10 @@ class Providers
 
     public function set($filename, $content, $getContent = false)
     {
+        if (!$this->hasError()) {
+            return false;
+        }
+
         if (empty($filename)) {
             throw new InvalidArgumentExceptions('Invalid filename');
         }
@@ -163,6 +169,10 @@ class Providers
 
     public function setMultiple($values, $getContent = false)
     {
+        if (!$this->hasError()) {
+            return false;
+        }
+
         if (empty($values)) {
             throw new InvalidArgumentExceptions('Values cannot be empty');
         }
@@ -227,7 +237,18 @@ class Providers
     protected function getContent($filepath)
     {
         $content = @file_get_contents($filepath);
+
+        if (!$content) {
+            $this->hasError = true;
+            $this->logIt('ERROR', "Failed to load: " . $filepath);
+        }
+
         return $content;
+    }
+
+    public function hasError()
+    {
+        return $this->hasError;
     }
 
     public function getBuildCacheName($endpoint = '')
@@ -291,5 +312,16 @@ class Providers
 
         $hash = hash('sha1', $keys);
         return "{$hash}.{$this->extension}";
+    }
+
+    public function logIt($level, $msg)
+    {
+        $fileName = 'log_cache.txt';
+        $path = $this->getBuildCacheName($fileName);
+
+        $date = new \DateTime('Now');
+        $date = $date->format('d/m/Y H:i:s');
+        $cacheMsg = '['. mb_strtoupper($level) .'] - ' . $msg . ' - At: ' . $date . PHP_EOL;
+        @file_put_contents($path, $cacheMsg, FILE_APPEND);
     }
 }
