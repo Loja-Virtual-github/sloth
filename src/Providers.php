@@ -77,9 +77,7 @@ class Providers
         $content = $this->processContent($content);
 
         if (!$this->hasError() && $this->cache_available) {
-            if (file_put_contents($filepath, $content) > 0) {
-                return $content;
-            }
+            @file_put_contents($filepath, $content);
         }
 
         return $content;
@@ -316,12 +314,13 @@ class Providers
         return "{$hash}.{$this->extension}";
     }
 
-    public function logIt($level, $msg)
+    public function logIt($level, $msg, $state = null)
     {
         $path = $this->config->log_path . '/log_cache.txt';
 
         $date = new \DateTime('Now');
         $date = $date->format('d/m/Y H:i:s');
+        $msg = $state . ' - ' . $msg;
         $cacheMsg = '['. mb_strtoupper($level) .'] - ' . $msg . ' - At: ' . $date . PHP_EOL;
         @file_put_contents($path, $cacheMsg, FILE_APPEND);
     }
