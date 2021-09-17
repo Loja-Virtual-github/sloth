@@ -17,13 +17,23 @@ class Cache implements CacheInterface
     private $provider;
 
     /**
+     * State variable to identify in log file
+     *
+     * @var string
+     */
+    private $state = null;
+
+    /**
      * Constructor
      *
      * @param ProviderInterface $provider
      */
-    public function __construct(Providers $provider)
+    public function __construct(Providers $provider, $state = null)
     {
         $this->provider = $provider;
+        $this->state = $state;
+
+        $this->provide->setState($this->state);
     }
 
     public function __call($method, $arguments)

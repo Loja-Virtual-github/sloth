@@ -11,6 +11,8 @@ class Providers
 {
     private $hasError = false;
 
+    private $state = null;
+
     private $defaultConfigs = array(
         'path'                  => '',
         'path_cache'            => 'cache',
@@ -238,7 +240,7 @@ class Providers
 
         if (!$content) {
             $this->hasError = true;
-            $this->logIt('ERROR', "Failed to load: " . $filepath);
+            $this->logIt('ERROR', "Failed to load: " . $filepath, $this->state);
         }
 
         return $content;
@@ -321,5 +323,10 @@ class Providers
         $date = $date->format('d/m/Y H:i:s');
         $cacheMsg = '['. mb_strtoupper($level) .'] - ' . $msg . ' - At: ' . $date . PHP_EOL;
         @file_put_contents($path, $cacheMsg, FILE_APPEND);
+    }
+
+    public function setState($state)
+    {
+        $this->state = $state;
     }
 }
