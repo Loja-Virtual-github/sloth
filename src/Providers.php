@@ -3,7 +3,7 @@
 namespace PabloSanches\Sloth;
 
 use DirectoryIterator;
-use PabloSanches\Sloth\InvalidArgumentExceptions;
+// use PabloSanches\Sloth\InvalidArgumentExceptions;
 use SplFileObject;
 use SplFileInfo;
 
