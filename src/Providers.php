@@ -36,7 +36,7 @@ class Providers
     public function get($key, $default = '')
     {
         if (empty($key)) {
-            throw new InvalidArgumentExceptions('Key empty');
+            // throw new InvalidArgumentExceptions('Key empty');
         }
 
         $filepath = $this->getBuildCacheName($key);
@@ -54,11 +54,11 @@ class Providers
         // }
 
         if (empty($filename)) {
-            throw new InvalidArgumentExceptions('Invalid filename');
+            // throw new InvalidArgumentExceptions('Invalid filename');
         }
 
         if (empty($content)) {
-            throw new InvalidArgumentExceptions("Invalid content from {$filename}");
+            // throw new InvalidArgumentExceptions("Invalid content from {$filename}");
         }
 
         if ($getContent) {
@@ -86,7 +86,7 @@ class Providers
     public function delete($filename)
     {
         if (empty($filename)) {
-            throw new InvalidArgumentExceptions('Invalid filename');
+            // throw new InvalidArgumentExceptions('Invalid filename');
         }
 
         $filepath = $this->getBuildCacheName($filename);
@@ -102,7 +102,7 @@ class Providers
     public function has($filename)
     {
         if (empty($filename)) {
-            throw new InvalidArgumentExceptions('Filename cannot be empty');
+            // throw new InvalidArgumentExceptions('Filename cannot be empty');
         }
 
         if (is_array($filename)) {
@@ -119,7 +119,7 @@ class Providers
         $cachePath = $this->getBuildCacheName();
         $dirInfo = new DirectoryIterator($cachePath);
         if (!$dirInfo->isDir()) {
-            throw new InvalidArgumentExceptions('Cache directory not founded');
+            // throw new InvalidArgumentExceptions('Cache directory not founded');
         }
 
         foreach ($dirInfo as $fileInfo) {
@@ -141,7 +141,7 @@ class Providers
     public function getMultiple(array $keys, $defaults = '')
     {
         if (empty($keys)) {
-            throw new InvalidArgumentExceptions('Keys cannot be empty');
+            // throw new InvalidArgumentExceptions('Keys cannot be empty');
         }
 
         $filename = $this->buildFileName($keys);
@@ -174,7 +174,7 @@ class Providers
     public function setMultiple($values, $getContent = false)
     {
         if (empty($values)) {
-            throw new InvalidArgumentExceptions('Values cannot be empty');
+            // throw new InvalidArgumentExceptions('Values cannot be empty');
         }
 
         $contentList = array_values($values);
@@ -303,7 +303,7 @@ class Providers
         }
 
         if (empty($keys)) {
-            throw new InvalidArgumentExceptions('Keys cannot be empty');
+            // throw new InvalidArgumentExceptions('Keys cannot be empty');
         }
 
         if (is_array($keys)) {
