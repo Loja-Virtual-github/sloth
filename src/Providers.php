@@ -238,7 +238,7 @@ class Providers
     {
         $content = @file_get_contents($filepath);
 
-        if (!$content) {
+        if ($content === false) {
             $this->hasError = true;
             $this->logIt('ERROR', "Failed to load: " . $filepath, $this->state);
         }
