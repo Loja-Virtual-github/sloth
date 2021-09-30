@@ -240,8 +240,9 @@ class Providers
         $content = @file_get_contents($filepath);
 
         if (is_bool($content) && !$content) {
+            $error = error_get_last();
             $this->hasError = true;
-            $this->logIt('ERROR', "Failed to load: " . $filepath, $this->state);
+            $this->logIt('ERROR', "Failed to load: " . $filepath . " - ERROR_MSG: " . $error['message'], $this->state);
         }
 
         return $content;
