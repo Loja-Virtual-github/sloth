@@ -237,15 +237,15 @@ class Providers
 
     protected function getContent($filepath)
     {
-        $content = @file_get_contents($filepath);
-
-        if (is_bool($content) && !$content) {
-            $error = error_get_last();
+        try {
+            $content = @file_get_contents($filepath);
+            return $content;
+        } catch (\Exception $e) {
             $this->hasError = true;
-            $this->logIt('ERROR', "Failed to load: " . $filepath . " - ERROR_MSG: " . $error['message'], $this->state);
+            $this->logIt('ERROR', "Failed to load: " . $filepath . " - ERROR_MSG: " . $e->getMessage(), $this->state);
         }
 
-        return $content;
+        return false;
     }
 
     public function hasError()
