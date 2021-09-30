@@ -102,6 +102,7 @@ class Providers
     public function has($filename)
     {
         if (empty($filename)) {
+            return false;
             // throw new InvalidArgumentExceptions('Filename cannot be empty');
         }
 
@@ -110,7 +111,7 @@ class Providers
             $filename = $this->buildFileName($keys);
         }
         $cacheName = $this->getBuildCacheName($filename);
-
+        $this->logIt('HAS', "PATH: " . $cacheName, $this->state);
         return file_exists($cacheName);
     }
 
