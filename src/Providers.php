@@ -237,13 +237,26 @@ class Providers
 
     protected function getContent($filepath)
     {
-        try {
-            $content = @file_get_contents($filepath);
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $filepath);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET"); 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // Timeout in seconds
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+
+        $content = curl_exec($ch);
+
+        // $content = file_get_contents($filepath);
+        
+        if ($content !== false) {
             return $content;
-        } catch (\Exception $e) {
-            $this->hasError = true;
-            $this->logIt('ERROR', "Failed to load: " . $filepath . " - ERROR_MSG: " . $e->getMessage(), $this->state);
         }
+        $this->hasError = true;
+        $this->logIt('ERROR', "Failed to load: " . $filepath, $this->state);
 
         return false;
     }
