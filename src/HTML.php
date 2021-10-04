@@ -1,9 +1,9 @@
 <?php
 
-namespace PabloSanches\Sloth;
+namespace LojaVirtual\Sloth;
 
-use PabloSanches\Sloth\Providers;
-use PabloSanches\Sloth\InvalidArgumentExceptions;
+use LojaVirtual\Sloth\Providers;
+use LojaVirtual\Sloth\InvalidArgumentExceptions;
 
 use SplFileObject;
 use Phar;

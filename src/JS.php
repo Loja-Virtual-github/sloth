@@ -1,8 +1,8 @@
 <?php
 
-namespace PabloSanches\Sloth;
+namespace LojaVirtual\Sloth;
 
-use PabloSanches\Sloth\Providers;
+use LojaVirtual\Sloth\Providers;
 
 class JS extends Providers
 {

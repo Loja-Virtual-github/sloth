@@ -1,6 +1,6 @@
 <?php
 
-namespace PabloSanches\Sloth;
+namespace LojaVirtual\Sloth;
 
 use Exception;
 

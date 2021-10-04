@@ -1,8 +1,8 @@
 <?php
 
-namespace PabloSanches\Sloth;
+namespace LojaVirtual\Sloth;
 
-use PabloSanches\Sloth\CacheExceptions;
+use LojaVirtual\Sloth\CacheExceptions;
 use Psr\SimpleCache\InvalidArgumentException;
 
 class InvalidArgumentExceptions 

@@ -1,9 +1,9 @@
 <?php
 
-namespace PabloSanches\Sloth;
+namespace LojaVirtual\Sloth;
 
 use DirectoryIterator;
-// use PabloSanches\Sloth\InvalidArgumentExceptions;
+// use LojaVirtual\Sloth\InvalidArgumentExceptions;
 use SplFileObject;
 use SplFileInfo;
 

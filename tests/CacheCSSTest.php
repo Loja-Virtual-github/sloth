@@ -1,14 +1,14 @@
 <?php
 
-namespace PabloSanches\Sloth\Tests;
+namespace LojaVirtual\Sloth\Tests;
 
 use PHPUnit\Framework\TestCase;
 
 use SplFileInfo;
 use SplFileObject;
 
-use PabloSanches\Sloth\Cache;
-use PabloSanches\Sloth\CSS;
+use LojaVirtual\Sloth\Cache;
+use LojaVirtual\Sloth\CSS;
 
 class CacheCSSTest extends TestCase
 {

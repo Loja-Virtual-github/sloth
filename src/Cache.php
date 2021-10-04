@@ -1,9 +1,9 @@
 <?php
 
-namespace PabloSanches\Sloth;
+namespace LojaVirtual\Sloth;
 
 use Psr\SimpleCache\CacheInterface;
-use PabloSanches\Sloth\Providers;
+use LojaVirtual\Sloth\Providers;
 
 use SplFileInfo;
 
