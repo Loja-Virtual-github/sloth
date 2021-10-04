@@ -58,4 +58,9 @@ class CSS extends Providers
 
         return $content;
     }
+
+    protected function getContent($filepath)
+    {    
+        return "@import-pablo url('$filepath');" . PHP_EOL;
+    }
 }
