@@ -111,7 +111,7 @@ class Providers
             $filename = $this->buildFileName($keys);
         }
         $cacheName = $this->getBuildCacheName($filename);
-        $this->logIt('HAS', "PATH: " . $cacheName, $this->state);
+        // $this->logIt('HAS', "PATH: " . $cacheName, $this->state);
         return file_exists($cacheName);
     }
 
@@ -333,6 +333,7 @@ class Providers
         $date = $date->format('d/m/Y H:i:s');
         $msg = $state . ' - ' . $msg;
         $cacheMsg = '['. mb_strtoupper($level) .'] - ' . $msg . ' - At: ' . $date . PHP_EOL;
+        exit(var_dump($path));
         @file_put_contents($path, $cacheMsg, FILE_APPEND);
     }
 
