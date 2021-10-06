@@ -59,8 +59,12 @@ class CSS extends Providers
         return $content;
     }
 
-    protected function getContent($filepath)
+    protected function getContent($filepath, $fromCache = false)
     {    
+        if ($fromCache) {
+            return file_get_contents($filepath);
+        }
+
         return "@import url('$filepath');" . PHP_EOL;
     }
 }

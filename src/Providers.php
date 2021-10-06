@@ -139,7 +139,7 @@ class Providers
         return true;
     }
 
-    public function getMultiple(array $keys, $defaults = '')
+    public function getMultiple(array $keys, $defaults = '', $fromCache = false)
     {
         if (empty($keys)) {
             // throw new InvalidArgumentExceptions('Keys cannot be empty');
@@ -148,7 +148,7 @@ class Providers
         $filename = $this->buildFileName($keys);
         if ($this->has($filename)) {
             $filepath = $this->getBuildCacheName($filename);
-            return $this->getContent($filepath);
+            return $this->getContent($filepath, $fromCache);
         }
 
         $contents = array();
