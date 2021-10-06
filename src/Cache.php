@@ -121,11 +121,11 @@ class Cache implements CacheInterface
      * @throws \Psr\SimpleCache\InvalidArgumentException    thrown if $keys is neither an array nor a Traversable,
      *   or if any of the $keys are not a legal value
      */
-    public function getMultiple($keys, $default = null)
+    public function getMultiple($keys, $default = null, $fromCache = false)
     {
         return $this
             ->provider
-            ->getMultiple($keys, $default);
+            ->getMultiple($keys, $default, $fromCache);
     }
 
     /**
