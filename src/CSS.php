@@ -23,12 +23,12 @@ class CSS extends Providers
         return new CSS($config);
     }
 
-    public function processContent($content)
+    public function processContent($content, $forceMinify = false)
     {
         $content = trim($content);
 
         // Minify all files
-        if ($this->config->minify) {
+        if ($this->config->minify || $forceMinify) {
             $this->minify($content);
         }
 
@@ -51,20 +51,12 @@ class CSS extends Providers
         return true;
     }
 
-    private function concat($contents)
-    {
-        $content = '';
+    // protected function getContent($filepath, $fromCache = false)
+    // {
+    //     if ($fromCache) {
+    //         return file_get_contents($filepath);
+    //     }
 
-
-        return $content;
-    }
-
-    protected function getContent($filepath, $fromCache = false)
-    {    
-        if ($fromCache) {
-            return file_get_contents($filepath);
-        }
-
-        return "@import url('$filepath');" . PHP_EOL;
-    }
+    //     return "@import url('$filepath');" . PHP_EOL;
+    // }
 }

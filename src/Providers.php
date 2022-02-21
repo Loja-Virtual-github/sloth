@@ -211,13 +211,32 @@ class Providers
         return $this->delete($filename);
     }
 
+    public function compileMultiple(array $cssList)
+    {
+        $content = '';
+        if (!empty($cssList)) {
+            foreach ($cssList as $contentFile) {
+                $content .= $this->getContent($contentFile);
+            }
+        }
+
+        if (is_array($cssList)) {
+            $keys = array_keys($cssList);
+            $filename = $this->buildFileName($keys);
+        }
+        $filepath = $this->getBuildCacheName($filename);
+        $content = $this->processContent($content, true);
+
+        @file_put_contents($filepath, $content);
+    }
+
     protected function getContentFromList(array $contentList)
     {
         $content = '';
 
         if (!empty($contentList)) {
             foreach ($contentList as $contentFile) {
-                $content .= $this->getContent($contentFile);
+                $content .= $this->getContentImport($contentFile);
             }
         }
 
@@ -235,6 +254,11 @@ class Providers
         return $this->extension;
     }
 
+    protected function getContentImport($filepath)
+    {
+        return "@import url('{$filepath}');" . PHP_EOL;
+    }
+
     protected function getContent($filepath)
     {
 
@@ -242,12 +266,15 @@ class Providers
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_URL, $filepath);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
         $content = curl_exec($ch);
+        $info = curl_getinfo($ch);
         curl_close($ch);
 
-        // $content = file_get_contents($filepath);
-        
+        // $content = file_get_content?s($filepath);
+
         if ($content !== false) {
             return $content;
         }
@@ -333,7 +360,7 @@ class Providers
         $date = $date->format('d/m/Y H:i:s');
         $msg = $state . ' - ' . $msg;
         $cacheMsg = '['. mb_strtoupper($level) .'] - ' . $msg . ' - At: ' . $date . PHP_EOL;
-        exit(var_dump($path));
+
         @file_put_contents($path, $cacheMsg, FILE_APPEND);
     }
 
